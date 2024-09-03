@@ -111,7 +111,7 @@ function changeTime(time) {
         <div  class="fixed  bottom-0  h-[3.5rem] md:h-20 md:w-[20rem] md:group-hover:w-[40rem] overflow-hidden w-[90vw]  duration-300 mb-3 md:mb-6  rounded-full md:pl-10 pr-10 bg-neutral-900 flex items-center justify-between ">
             <div @click="isOpen=!isOpen" class="z-50 md:hidden  absolute h-20 w-full " />
             <transition name="fade-blur">
-                    <img :src="music[musicPosition].cover" alt="" class="absolute opacity-30 pr-20 blur-2xl z-0 h-7 w-[222rem]">
+                    <img :src="music[musicPosition].cover" alt="" class="absolute opacity-30 pr-20 blur-xl scale-150  z-0 h-7 w-[222rem]">
                 </transition>
 
                     <div class="flex h-20 w-full  md:items-center justify-start   gap-4 z-0 text-white">
@@ -129,10 +129,10 @@ function changeTime(time) {
                     <img v-else src="../assets/icon/play.svg" alt="" class="h-5 w-5 cursor-pointer" @click="play(true)">
                     <img src="../assets/icon/next.svg" alt="" class="h-5 w-5 cursor-pointer" @click="next()">
                 </div>
-                <div class="relative h-5 w-full flex items-end select-none">
+                <div class="relative h-5 w-full flex items-end select-none rounded-xl">
                     <input type="range" min="0" :max="duration"  v-model="currentTime" @input="changeTime(currentTime)" class=" w-full absolute h-1 rounded-xl bg-neutral-800 z-30"  id="myRange" >
-                    <div class=" absolute h-1 rounded-xl bg-blue-500 z-30" :style="{ width: `${currentTime / duration * 100}%` }"></div>
-                    <div class=" absolute h-1 rounded-xl bg-white z-0 w-full" ></div>
+                    <div class=" absolute h-1 rounded-xl bg-white z-30" :style="{ width: `${currentTime / duration * 100}%` }"></div>
+                    <div class=" absolute h-1 rounded-xl bg-neutral-600 z-0 w-full" ></div>
     
                 </div>
 
@@ -154,8 +154,8 @@ function changeTime(time) {
                     
                     <div class="relative h-5 w-20 flex items-center select-none ">
                         <input type="range" min="0" :max="100"  v-model="volume"  class=" cursor-pointer w-full absolute h-1 rounded-xl bg-neutral-800 z-30"  id="myRange" >
-                        <div class=" absolute h-1 rounded-xl bg-neutral-500 z-30" :style="{ width: `${volume / 100 * 100}%` }"></div>
-                        <div class=" absolute h-1 rounded-xl bg-white z-0 w-full" ></div>
+                        <div class=" absolute h-1 rounded-xl bg-white z-30" :style="{ width: `${volume / 100 * 100}%` }"></div>
+                        <div class=" absolute h-1 rounded-xl bg-neutral-500 z-0 w-full" ></div>
         
                     </div>
                     <img src="../assets/icon/volumeUp.svg" alt="" class="h-5 w-5 ">
@@ -174,9 +174,9 @@ function changeTime(time) {
 
         </div>
         <div class="h-full w-full flex text-white flex-col gap-6">
-            <div>
+            <div class=" flex  justify-center ">
                 <img :src="music[musicPosition].cover" alt="" class="absolute rounded-xl opacity-20 scale-150 blur-xl z-0">
-                <img :src="music[musicPosition].cover" alt="" class="  z-10  rounded-3xl flex">
+                <img :src="music[musicPosition].cover" alt="" class="  z-10 h-[18rem] w-[18rem] object-cover  rounded-3xl flex">
 
             </div>
             <div class="flex flex-col justify-center items-start ">
@@ -197,8 +197,8 @@ function changeTime(time) {
 
             <div class="relative flex items-end select-none">
                 <input type="range" min="0" :max="duration"  v-model="currentTime" @input="changeTime(currentTime)" class=" w-full absolute h-2 rounded-xl bg-neutral-800 z-30"  id="myRange" >
-                <div class=" absolute h-2 rounded-xl bg-neutral-800 z-30" :style="{ width: `${currentTime / duration * 100}%` }"></div>
-                <div class=" absolute h-2 rounded-xl bg-white z-0 w-full" ></div>
+                <div class=" absolute h-2 rounded-xl bg-white z-30" :style="{ width: `${currentTime / duration * 100}%` }"></div>
+                <div class=" absolute h-2 rounded-xl bg-neutral-800 z-0 w-full" ></div>
 
             </div>
         </div>
@@ -217,7 +217,7 @@ function changeTime(time) {
     }
     .v-enter-active,
     .v-leave-active {
-      transition: all 0.2s ease;
+      transition: all 0.5s ease;
     }
     
     .v-enter-from,
