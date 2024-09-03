@@ -209,10 +209,10 @@ function changeTime(time) {
                     <img src="../assets/icon/random.svg" alt="" class="h-6">
                 </div>
                 <div class="h-10 w-fit bg-neutral-700 flex items-center justify-center p-2 rounded-full">
-                    <img src="../assets/icon/liked.svg" alt="" class="h-6">
+                    <img src="../assets/icon/like.svg" alt="" class="h-6">
                 </div>
                 <div class="h-10 w-fit bg-neutral-700 flex items-center justify-center p-2 rounded-full">
-                    <img src="../assets/icon/random.svg" alt="" class="h-6">
+                    <img src="../assets/icon/loop.svg" alt="" class="h-6">
                 </div>
                 
             </div>
