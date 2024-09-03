@@ -204,12 +204,15 @@ function changeTime(time) {
                 <div class=" absolute h-2 rounded-xl bg-neutral-800 z-0 w-full" ></div>
             </div>
 
-            <div class="flex items-center justify-center gap-6 ">
+            <div class="flex items-center justify-between gap-6 ">
                 <div class="h-10 w-fit bg-neutral-700 flex items-center justify-center p-2 rounded-full">
                     <img src="../assets/icon/random.svg" alt="" class="h-6">
                 </div>
                 <div class="h-10 w-fit bg-neutral-700 flex items-center justify-center p-2 rounded-full">
                     <img src="../assets/icon/liked.svg" alt="" class="h-6">
+                </div>
+                <div class="h-10 w-fit bg-neutral-700 flex items-center justify-center p-2 rounded-full">
+                    <img src="../assets/icon/random.svg" alt="" class="h-6">
                 </div>
                 
             </div>
