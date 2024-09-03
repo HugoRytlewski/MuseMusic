@@ -7,6 +7,7 @@
     const isOpen = ref(false);
     const currentTime = ref(0);
     const duration = ref(0);   
+    const isLiked = ref(false);
     const music = [
       {
         title: "La vie qu'on mène",
@@ -204,12 +205,15 @@ function changeTime(time) {
                 <div class=" absolute h-2 rounded-xl bg-neutral-800 z-0 w-full" ></div>
             </div>
 
-            <div class="flex items-center justify-between gap-6 ">
+            <div class="flex items-center justify-between gap-6 select-none">
                 <div class="h-10 w-fit bg-neutral-700 flex items-center justify-center p-2 rounded-full">
                     <img src="../assets/icon/random.svg" alt="" class="h-6">
                 </div>
-                <div class="h-10 w-fit bg-neutral-700 flex items-center justify-center p-2 rounded-full">
+                <div v-if="!isLiked" @click="isLiked=!isLiked" class="h-10 w-fit bg-neutral-700 flex items-center justify-center p-2 rounded-full">
                     <img src="../assets/icon/like.svg" alt="" class="h-6">
+                </div>
+                <div v-else @click="isLiked=!isLiked" class="h-10 w-fit bg-neutral-700 flex items-center justify-center p-2 rounded-full">
+                    <img src="../assets/icon/liked.svg" alt="" class="h-6">
                 </div>
                 <div class="h-10 w-fit bg-neutral-700 flex items-center justify-center p-2 rounded-full">
                     <img src="../assets/icon/loop.svg" alt="" class="h-6">
