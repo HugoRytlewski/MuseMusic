@@ -6,3 +6,11 @@ body {
   font-family: 'Nunito', sans-serif;
   @apply bg-neutral-950
 }
+
+/*********** Baseline, reset styles ***********/
+input[type="range"] {
+  opacity: 0;
+ 
+}
+
+/* Removes default focus */

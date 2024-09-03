@@ -1,92 +1,168 @@
 <script setup>
+    import { ref, onMounted, watch } from 'vue';
+    
     const isPlaying = ref(false);
+    const volume = ref(50);
     const musicPosition = ref(0);
     const isOpen = ref(false);
+    const currentTime = ref(0);
+    const duration = ref(0);   
+    const music = [
+      {
+        title: "La vie qu'on mène",
+        artist: "Ninho",
+        duration: "03:04",
+        cover: "/img/ni.jpg",
+        src: "/music/b.mp3",
+      },
+      {
+        title: "Eurostar",
+        artist: "Ninho",
+        duration: "03:04",
+        cover: "/img/ni2.jpg",
+        src: "/music/a.mp3",
+      },
+    ];
+    
+    let audio;
+    
+    onMounted(() => {
+      audio = new Audio();
+      audio.addEventListener('loadedmetadata', () => {
+    duration.value = audio.duration;
+  });
 
+  audio.addEventListener('timeupdate', () => {
+    currentTime.value = audio.currentTime;
+  });
+});
+
+    
     function play() {
-        isPlaying.value = true;
-    }
-    function stop() {
+      if (!audio.src) {
+        audio.src = music[musicPosition.value].src;
+      }
+    
+      if (isPlaying.value) {
+        audio.pause();
         isPlaying.value = false;
+      } else {
+        audio.volume = volume.value / 100;
+        audio.play();
+        isPlaying.value = true;
+      }
     }
-    function next() {        
-        if (musicPosition.value === music.length - 1) {
-            musicPosition.value = 0;
-        } else
-        musicPosition.value++;
+    
+    function setVolume(numb) {
+      volume.value = Math.min(Math.max(numb, 0), 100);
+      if (audio) audio.volume = volume.value / 100;
+    }
+    
+    function changeTrack(newPosition) {
+      if (isPlaying.value) {
+        audio.pause();
+      }
+      musicPosition.value = newPosition;
+      audio.src = music[musicPosition.value].src;
+      audio.volume = volume.value / 100;
+      audio.play();
+      isPlaying.value = true;
+    }
+    
+    function next() {
+      let newPosition = (musicPosition.value + 1) % music.length;
+      changeTrack(newPosition);
     }
     
     function previous() {
-        if (musicPosition.value === 0) {
-            musicPosition.value = music.length - 1;
-        } else
-        musicPosition.value--;
+      let newPosition = (musicPosition.value - 1 + music.length) % music.length;
+      changeTrack(newPosition);
     }
     
-    const music = (
-        [
-            {
-                title: "Destin",
-                artist: "Ninho",
-                duration: "03:04",
-                cover: "/img/ni.jpg",
-                src: "../assets/music/bella.mp3"
-            },
-            {
-                title: "EuroStar",
-                artist: "Ninho",
-                duration: "03:04",
-                cover: "/img/ni2.jpg",
-                src: "../assets/music/sapes_comme_jamais.mp3"
-            },
-        ]
-    );
-    
-</script>
+    watch(volume, (newValue) => {
+      if (audio) audio.volume = newValue / 100;
+    });
+
+    function formatTime(seconds) {
+  const minutes = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+}
+
+function changeTime(time) {
+    audio.currentTime = time;
+    }
+
+    onMounted(() => {
+    for (let e of document.querySelectorAll('input[type="range"].slider-progress')) {
+        e.style.setProperty('--value', e.value);
+        e.style.setProperty('--min', e.min == '' ? '0' : e.min);
+        e.style.setProperty('--max', e.max == '' ? '100' : e.max);
+        e.addEventListener('input', () => e.style.setProperty('--value', e.value));
+      }
+});
+    </script>
+
 
 <template>
-    <div class="fixed bottom-0 h-20 w-screen  flex items-end justify-center group ">
-        <div  class="fixed  bottom-0  h-[3.5rem] md:h-20 md:w-[20rem] md:group-hover:w-[35rem] overflow-hidden w-[90vw]  duration-300 mb-3 md:mb-6  rounded-full md:pl-10 pr-10 bg-neutral-900 flex items-center justify-between ">
+    <audio control src="C:\Users\hugo\Desktop\MuseMusic\public\music\Eurostar (feat. Central Cee).mp3"></audio>
+
+    <div class="fixed bottom-0 h-20 left-1/2 flex items-center justify-center group">
+        <div  class="fixed  bottom-0  h-[3.5rem] md:h-20 md:w-[20rem] md:group-hover:w-[40rem] overflow-hidden w-[90vw]  duration-300 mb-3 md:mb-6  rounded-full md:pl-10 pr-10 bg-neutral-900 flex items-center justify-between ">
             <div @click="isOpen=!isOpen" class="z-50 md:hidden  absolute h-20 w-full " />
             <transition name="fade-blur">
                     <img :src="music[musicPosition].cover" alt="" class="absolute opacity-30 pr-20 blur-2xl z-0 h-7 w-[222rem]">
                 </transition>
-               
 
                     <div class="flex h-20 w-full  md:items-center justify-start   gap-4 z-0 text-white">
                     <img :src="music[musicPosition].cover" alt="" class="md:h-14 md:w-14  rounded- md:rounded-none flex">
                     <div class="flex flex-col justify-center items-start ">
-                        <p>{{music[musicPosition].title}}</p>
+                        <p class="w-32 line-clamp-1 group-hover:w-max overflow-hidden h-6 ">{{music[musicPosition].title}}</p>
                         <p class="text-neutral-500">{{music[musicPosition].artist}}</p>
                     </div>
                 </div>
-                <div class="hidden md:flex  h-20 w-[30vw]  items-center justify-center gap-4 z-30 text-white  transition-all  opacity-0 md:group-hover:opacity-100 ">
+                <div class="hidden md:flex flex-col h-20 w-[30vw]  items-center justify-center gap-4 z-30 text-white  transition-all  opacity-0 md:group-hover:opacity-100 ">
+                   <div class="flex gap-4 h-1">
+
                     <img src="../assets/icon/previous.svg" alt="" class="h-5 w-5 cursor-pointer" @click="previous()">
-                    <img v-if="isPlaying" src="../assets/icon/stop.svg" alt="" class="h-5 w-5 cursor-pointer" @click="stop()">
-                    <img v-else src="../assets/icon/play.svg" alt="" class="h-5 w-5 cursor-pointer" @click="play()">
+                    <img v-if="isPlaying" src="../assets/icon/stop.svg" alt="" class="h-5 w-5 cursor-pointer" @click="play(false)">
+                    <img v-else src="../assets/icon/play.svg" alt="" class="h-5 w-5 cursor-pointer" @click="play(true)">
                     <img src="../assets/icon/next.svg" alt="" class="h-5 w-5 cursor-pointer" @click="next()">
+                </div>
+                <div class="relative h-5 w-full flex items-end select-none">
+                    <input type="range" min="0" :max="duration"  v-model="currentTime" @input="changeTime(currentTime)" class=" w-full absolute h-1 rounded-xl bg-neutral-800 z-30"  id="myRange" >
+                    <div class=" absolute h-1 rounded-xl bg-blue-500 z-30" :style="{ width: `${currentTime / duration * 100}%` }"></div>
+                    <div class=" absolute h-1 rounded-xl bg-white z-0 w-full" ></div>
+    
+                </div>
+
                 </div>   
-        
+
             <div class=" flex h-20 w-fit md:w-full items-center justify-end gap-2  text-white  z-50 ">
                 <div  class="  md:group-hover:hidden text-sm font-bold text-neutral-500"">
-                    <p class="hidden md:flex">02:30</p>
+                    <p class="hidden md:flex">{{ formatTime(currentTime) }}</p>
                     <div class=" flex gap-4 justify-center items-center md:hidden  z-50">
                         <img src="../assets/icon/previous.svg" alt="" class="h-5 w-5 cursor-pointer" @click="previous()">
-                        <img v-if="isPlaying" src="../assets/icon/stop.svg" alt="" class="h-5 w-5 cursor-pointer" @click="stop()">
-                        <img v-else src="../assets/icon/play.svg" alt="" class="h-5 w-5 cursor-pointer" @click="play()">
+                        <img v-if="isPlaying" src="../assets/icon/stop.svg" alt="" class="h-5 w-5 cursor-pointer" @click="play(false)">
+                        <img v-else src="../assets/icon/play.svg" alt="" class="h-5 w-5 cursor-pointer" @click="play(true)">
                         <img src="../assets/icon/next.svg" alt="" class="h-5 w-5 cursor-pointer" @click="next()">
+
                     </div>
+
                 </div>
                 <div class=" md:group-hover:flex hidden gap-6 items-center justify-center">
-                    <div class="h-[4px] w-20 bg-neutral-500 rounded-full overflow-hidden ">
-                        <div class="h-full w-1/2 bg-white "></div>
+                    
+                    <div class="relative h-5 w-20 flex items-center select-none ">
+                        <input type="range" min="0" :max="100"  v-model="volume"  class=" cursor-pointer w-full absolute h-1 rounded-xl bg-neutral-800 z-30"  id="myRange" >
+                        <div class=" absolute h-1 rounded-xl bg-neutral-500 z-30" :style="{ width: `${volume / 100 * 100}%` }"></div>
+                        <div class=" absolute h-1 rounded-xl bg-white z-0 w-full" ></div>
+        
                     </div>
                     <img src="../assets/icon/volumeUp.svg" alt="" class="h-5 w-5 ">
                 </div>
             </div>
         </div>
 
-   
     
     
 
@@ -109,24 +185,22 @@
             </div>
             <div class=" flex gap-4 justify-center items-center md:hidden  z-50">
                 <img src="../assets/icon/previous.svg" alt="" class="h-8 w-8 cursor-pointer" @click="previous()">
-                <img v-if="isPlaying" src="../assets/icon/stop.svg" alt="" class="h-8 w-8 cursor-pointer" @click="stop()">
-                <img v-else src="../assets/icon/play.svg" alt="" class="h-8 w-8 cursor-pointer" @click="play()">
+                <img v-if="isPlaying" src="../assets/icon/stop.svg" alt="" class="h-8 w-8 cursor-pointer" @click="play(false)">
+                <img v-else src="../assets/icon/play.svg" alt="" class="h-8 w-8 cursor-pointer" @click="play(true)">
                 <img src="../assets/icon/next.svg" alt="" class="h-8 w-8 cursor-pointer" @click="next()">
             </div>
-            <div class="w-[20rem] h-1 text-xs flex justify-between">
-                <p>02:00</p>
-                <p>04:00</p>
+            <div class="w-full h-1 text-xs flex justify-between">
+                <p>{{ formatTime(currentTime) }}</p>
+                <p>{{ formatTime(duration) }}</p>
             </div>
-            <div class="flex flex-col relative">
-                
-                <div class="z-0 absolute w-[20rem] h-[1px] bg-neutral-600 rounded-full">
-                </div>
-                <div class="z-20 absolute w-[10rem] h-[1px] bg-white rounded-full">
-                </div>
+        
 
+            <div class="relative flex items-end select-none">
+                <input type="range" min="0" :max="duration"  v-model="currentTime" @input="changeTime(currentTime)" class=" w-full absolute h-2 rounded-xl bg-neutral-800 z-30"  id="myRange" >
+                <div class=" absolute h-2 rounded-xl bg-neutral-800 z-30" :style="{ width: `${currentTime / duration * 100}%` }"></div>
+                <div class=" absolute h-2 rounded-xl bg-white z-0 w-full" ></div>
 
             </div>
-
         </div>
 
     </div>
