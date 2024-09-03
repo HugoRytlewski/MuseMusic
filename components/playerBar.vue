@@ -179,10 +179,13 @@ function changeTime(time) {
                 <img :src="music[musicPosition].cover" alt="" class="  z-10 h-[18rem] w-[18rem] object-cover  rounded-3xl flex">
 
             </div>
-            <div class="flex flex-col justify-center items-start ">
-                <p>{{music[musicPosition].title}}</p>
-                <p class="text-neutral-500">{{music[musicPosition].artist}}</p>
+            <div>
+                <div class="flex flex-col justify-center items-start font-bold text-2xl ">
+                    <p>{{music[musicPosition].title}}</p>
+                    <p class="text-neutral-500">{{music[musicPosition].artist}}</p>
+                </div>
             </div>
+           
             <div class=" flex gap-4 justify-center items-center md:hidden  z-50">
                 <img src="../assets/icon/previous.svg" alt="" class="h-8 w-8 cursor-pointer" @click="previous()">
                 <img v-if="isPlaying" src="../assets/icon/stop.svg" alt="" class="h-8 w-8 cursor-pointer" @click="play(false)">
@@ -199,7 +202,16 @@ function changeTime(time) {
                 <input type="range" min="0" :max="duration"  v-model="currentTime" @input="changeTime(currentTime)" class=" w-full absolute h-2 rounded-xl bg-neutral-800 z-30"  id="myRange" >
                 <div class=" absolute h-2 rounded-xl bg-white z-30" :style="{ width: `${currentTime / duration * 100}%` }"></div>
                 <div class=" absolute h-2 rounded-xl bg-neutral-800 z-0 w-full" ></div>
+            </div>
 
+            <div class="flex items-center justify-center gap-6 ">
+                <div class="h-10 w-fit bg-neutral-700 flex items-center justify-center p-2 rounded-full">
+                    <img src="../assets/icon/random.svg" alt="" class="h-6">
+                </div>
+                <div class="h-10 w-fit bg-neutral-700 flex items-center justify-center p-2 rounded-full">
+                    <img src="../assets/icon/liked.svg" alt="" class="h-6">
+                </div>
+                
             </div>
         </div>
 
