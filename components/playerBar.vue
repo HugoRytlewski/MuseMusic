@@ -8,7 +8,8 @@
     const currentTime = ref(0);
     const duration = ref(0);   
     const isLiked = ref(false);
-    const music = [
+    const isRandom = ref(false);
+    let music = [
       {
         title: "La vie qu'on mène",
         artist: "Ninho",
@@ -23,6 +24,14 @@
         cover: "/img/ni2.jpg",
         src: "/music/a.mp3",
       },
+      {
+        title: "Zinzin",
+        artist: "H.E.M",
+        duration: "01:32",
+        cover: "/img/zinzin.jpg",
+        src: "/music/c.mp3",
+        
+      }
     ];
     
     let audio;
@@ -102,6 +111,47 @@ function changeTime(time) {
         e.addEventListener('input', () => e.style.setProperty('--value', e.value));
       }
 });
+
+function random() {
+  if(isRandom.value == false){
+    music.sort(() => Math.random() - 0.5);
+    isRandom.value = true
+    console.log(music ,'random');
+  }
+  else{
+      music = [
+      {
+        title: "La vie qu'on mène",
+        artist: "Ninho",
+        duration: "03:04",
+        cover: "/img/ni.jpg",
+        src: "/music/b.mp3",
+      },
+      {
+        title: "Eurostar",
+        artist: "Ninho",
+        duration: "03:04",
+        cover: "/img/ni2.jpg",
+        src: "/music/a.mp3",
+      },
+      {
+        title: "Zinzin",
+        artist: "H.E.M",
+        duration: "01:32",
+        cover: "/img/zinzin.jpg",
+        src: "/music/c.mp3",
+        
+      }
+    ];
+      isRandom.value = false;
+      console.log(music, 'normal');
+  }
+    
+  }
+
+
+  
+   
     </script>
 
 
@@ -159,7 +209,10 @@ function changeTime(time) {
                         <div class=" absolute h-1 rounded-xl bg-neutral-500 z-0 w-full" ></div>
         
                     </div>
-                    <img src="../assets/icon/volumeUp.svg" alt="" class="h-5 w-5 ">
+                    <img v-if="volume >= 50" src="../assets/icon/volumeUp.svg" alt="" class="h-5 w-5 ">
+                    <img v-if="volume<50 && volume > 1" src="../assets/icon/volumedown.svg" alt="" class="h-5 w-5 ">
+                    <img v-if="volume==0" src="../assets/icon/volumeOff.svg" alt="" class="h-5 w-5 ">
+
                 </div>
             </div>
         </div>
@@ -206,16 +259,22 @@ function changeTime(time) {
             </div>
 
             <div class="flex items-center justify-between gap-6 select-none">
-                <div class="h-10 w-fit bg-neutral-700 flex items-center justify-center p-2 rounded-full">
-                    <img src="../assets/icon/random.svg" alt="" class="h-6">
+                <div 
+                @click="random()" 
+                class="h-10 w-fit bg-neutral-700 active:bg-neutral-400 flex items-center justify-center p-2 rounded-full"
+                :class="{'bg-neutral-400': isRandom}"
+                
+                >
+                
+                <img src="../assets/icon/random.svg" alt="" class="h-6">
                 </div>
-                <div v-if="!isLiked" @click="isLiked=!isLiked" class="h-10 w-fit bg-neutral-700 flex items-center justify-center p-2 rounded-full">
+                <div v-if="!isLiked" @click="isLiked=!isLiked" class="h-10 w-fit active:bg-neutral-400 bg-neutral-700 flex items-center justify-center p-2 rounded-full">
                     <img src="../assets/icon/like.svg" alt="" class="h-6">
                 </div>
-                <div v-else @click="isLiked=!isLiked" class="h-10 w-fit bg-neutral-700 flex items-center justify-center p-2 rounded-full">
+                <div v-else @click="isLiked=!isLiked" class="h-10 w-fit active:bg-neutral-400 bg-neutral-700 flex items-center justify-center p-2 rounded-full">
                     <img src="../assets/icon/liked.svg" alt="" class="h-6">
                 </div>
-                <div class="h-10 w-fit bg-neutral-700 flex items-center justify-center p-2 rounded-full">
+                <div class="h-10 w-fit bg-neutral-700 active:bg-neutral-400 flex items-center justify-center p-2 rounded-full">
                     <img src="../assets/icon/loop.svg" alt="" class="h-6">
                 </div>
                 
