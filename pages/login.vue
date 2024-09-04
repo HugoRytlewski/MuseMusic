@@ -11,9 +11,11 @@
                 <img class="h-8" src="../assets/img/logoDeezer.png" alt="">
         </button>
         <p class="font-bold text-2xl">ou</p>
+        <nuxt-link to="/">
         <button class="text-white bg-neutral-900 hover:bg-opacity-50 duration-500 p-8 rounded-xl h-10 w-fit flex items-center">
             <img class="h-8" src="../assets/img/logoSpotify.png" alt="">
         </button>
+        </nuxt-link>
         
     </div>
 

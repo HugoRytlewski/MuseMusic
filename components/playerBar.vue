@@ -151,7 +151,7 @@ function loop(){
 
 
 <template>
-    <div class="fixed bottom-0 h-20 left-1/2 flex items-center justify-center group">
+    <div class="select-none fixed bottom-0 h-20 left-1/2 flex items-center justify-center group">
         <div  class="fixed  bottom-0  h-[3.5rem] md:h-20 md:w-[20rem] md:group-hover:w-[45rem] overflow-hidden w-[90vw]  duration-300 mb-3 md:mb-6  rounded-full md:pl-10 pr-10 bg-neutral-900 flex items-center justify-between ">
             <div @click="isOpen=!isOpen" class="z-50 md:hidden  absolute h-20 w-full " />
             <transition name="fade-blur">
@@ -159,9 +159,9 @@ function loop(){
                 </transition>
 
                     <div class="flex h-20 w-full  md:items-center justify-start   gap-4 z-0 text-white">
-                      <div class="bg-neutral-500 absolute h-14 w-14 bg-opacity-0 group/i hover:bg-opacity-25 transition-all flex items-center justify-center"> 
-                        <img @click="isLiked=!isLiked" v-if="isLiked" src="../assets/icon/like.svg" alt="" class="h-6 group-hover/i:opacity-100 opacity-0 cursor-pointer transition-all">
-                        <img @click="isLiked=!isLiked" v-if="!isLiked" src="../assets/icon/liked.svg" alt="" class="h-6 group-hover/i:opacity-100 opacity-0 cursor-pointer transition-all">
+                      <div class="bg-neutral-500 absolute h-14 w-14 group-hover:bg-opacity-50 bg-opacity-0 transition-all flex items-center justify-center"> 
+                        <img @click="isLiked=!isLiked" v-if="isLiked" src="../assets/icon/like.svg" alt="" class="h-6 group-hover:opacity-100 opacity-0 cursor-pointer transition-all">
+                        <img @click="isLiked=!isLiked" v-if="!isLiked" src="../assets/icon/liked.svg" alt="" class="h-6 group-hover:opacity-100 opacity-0 cursor-pointer transition-all">
 
                       </div>
                     <img :src="music[musicPosition].cover" alt="" class="md:h-14 md:w-14  rounded- md:rounded-none flex">

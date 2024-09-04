@@ -42,7 +42,5 @@ const playMusic = async () => {
 };
 </script>
 <template>
-  <leftBar />
 
-    <playerBar />
   </template>
