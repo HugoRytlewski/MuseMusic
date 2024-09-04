@@ -113,41 +113,28 @@ function changeTime(time) {
 });
 
 function random() {
-  if(isRandom.value == false){
-    music.sort(() => Math.random() - 0.5);
-    isRandom.value = true
-    console.log(music ,'random');
-  }
-  else{
-      music = [
-      {
-        title: "La vie qu'on mène",
-        artist: "Ninho",
-        duration: "03:04",
-        cover: "/img/ni.jpg",
-        src: "/music/b.mp3",
-      },
-      {
-        title: "Eurostar",
-        artist: "Ninho",
-        duration: "03:04",
-        cover: "/img/ni2.jpg",
-        src: "/music/a.mp3",
-      },
-      {
-        title: "Zinzin",
-        artist: "H.E.M",
-        duration: "01:32",
-        cover: "/img/zinzin.jpg",
-        src: "/music/c.mp3",
-        
-      }
-    ];
-      isRandom.value = false;
-      console.log(music, 'normal');
-  }
+  
+  if (isRandom.value) {
+    isRandom.value = false;
+    //remettre la musique dans l'ordre avec la musique actuelle en premier
+    let currentMusic = music[musicPosition.value];
+    music = music.filter((m, i) => i !== musicPosition.value);
+    music = [currentMusic, ...music];
+    console.log(music);
+      } else {
+
+    isRandom.value = true;
+    let currentMusic = music[musicPosition.value];
+    music = music.filter((m, i) => i !== musicPosition.value);
+    music = [currentMusic, ...music.sort(() => Math.random() - 0.5)];
+    console.log(music);
+    musicPosition.value = 0;
+    
+
+
     
   }
+}
 
 
   
@@ -241,7 +228,7 @@ function random() {
             </div>
            
             <div class=" flex gap-4 justify-center items-center md:hidden  z-50">
-                <img src="../assets/icon/previous.svg" alt="" class="h-8 w-8 cursor-pointer" @click="previous()">
+                <img src="../assets/icon/next.svg" alt="" class="h-8 w-8 cursor-pointer rotate-180" @click="previous()">
                 <img v-if="isPlaying" src="../assets/icon/stop.svg" alt="" class="h-8 w-8 cursor-pointer" @click="play(false)">
                 <img v-else src="../assets/icon/play.svg" alt="" class="h-8 w-8 cursor-pointer" @click="play(true)">
                 <img src="../assets/icon/next.svg" alt="" class="h-8 w-8 cursor-pointer" @click="next()">
@@ -261,8 +248,8 @@ function random() {
             <div class="flex items-center justify-between gap-6 select-none">
                 <div 
                 @click="random()" 
-                class="h-10 w-fit bg-neutral-700 active:bg-neutral-400 flex items-center justify-center p-2 rounded-full"
-                :class="{'bg-neutral-400': isRandom}"
+                class="h-10 w-fit  active:bg-neutral-400 flex items-center justify-center p-2 rounded-full"
+                :class="{'bg-neutral-500': isRandom , 'bg-neutral-700': !isRandom}"
                 
                 >
                 
