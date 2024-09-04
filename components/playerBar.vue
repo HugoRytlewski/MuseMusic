@@ -9,6 +9,7 @@
     const duration = ref(0);   
     const isLiked = ref(false);
     const isRandom = ref(false);
+    const isLoop = ref(false);
     let music = [
       {
         title: "La vie qu'on mène",
@@ -116,18 +117,15 @@ function random() {
   
   if (isRandom.value) {
     isRandom.value = false;
-    //remettre la musique dans l'ordre avec la musique actuelle en premier
     let currentMusic = music[musicPosition.value];
     music = music.filter((m, i) => i !== musicPosition.value);
     music = [currentMusic, ...music];
-    console.log(music);
       } else {
 
     isRandom.value = true;
     let currentMusic = music[musicPosition.value];
     music = music.filter((m, i) => i !== musicPosition.value);
     music = [currentMusic, ...music.sort(() => Math.random() - 0.5)];
-    console.log(music);
     musicPosition.value = 0;
     
 
@@ -136,36 +134,62 @@ function random() {
   }
 }
 
+function loop(){
+  if (isLoop.value) {
+    isLoop.value = false;
+    audio.loop = false;
+  } else {
+    isLoop.value = true;
+    audio.loop = true;
+  }
+}
+
 
   
    
-    </script>
+</script>
 
 
 <template>
-    <audio control src="C:\Users\hugo\Desktop\MuseMusic\public\music\Eurostar (feat. Central Cee).mp3"></audio>
-
     <div class="fixed bottom-0 h-20 left-1/2 flex items-center justify-center group">
-        <div  class="fixed  bottom-0  h-[3.5rem] md:h-20 md:w-[20rem] md:group-hover:w-[40rem] overflow-hidden w-[90vw]  duration-300 mb-3 md:mb-6  rounded-full md:pl-10 pr-10 bg-neutral-900 flex items-center justify-between ">
+        <div  class="fixed  bottom-0  h-[3.5rem] md:h-20 md:w-[20rem] md:group-hover:w-[45rem] overflow-hidden w-[90vw]  duration-300 mb-3 md:mb-6  rounded-full md:pl-10 pr-10 bg-neutral-900 flex items-center justify-between ">
             <div @click="isOpen=!isOpen" class="z-50 md:hidden  absolute h-20 w-full " />
             <transition name="fade-blur">
                     <img :src="music[musicPosition].cover" alt="" class="absolute opacity-30 pr-20 blur-xl scale-150  z-0 h-7 w-[222rem]">
                 </transition>
 
                     <div class="flex h-20 w-full  md:items-center justify-start   gap-4 z-0 text-white">
+                      <div class="bg-neutral-500 absolute h-14 w-14 bg-opacity-0 group/i hover:bg-opacity-25 transition-all flex items-center justify-center"> 
+                        <img @click="isLiked=!isLiked" v-if="isLiked" src="../assets/icon/like.svg" alt="" class="h-6 group-hover/i:opacity-100 opacity-0 cursor-pointer transition-all">
+                        <img @click="isLiked=!isLiked" v-if="!isLiked" src="../assets/icon/liked.svg" alt="" class="h-6 group-hover/i:opacity-100 opacity-0 cursor-pointer transition-all">
+
+                      </div>
                     <img :src="music[musicPosition].cover" alt="" class="md:h-14 md:w-14  rounded- md:rounded-none flex">
                     <div class="flex flex-col justify-center items-start ">
-                        <p class="w-32 line-clamp-1 group-hover:w-max overflow-hidden h-6 ">{{music[musicPosition].title}}</p>
+                        <p class="w-32 line-clamp-1 group-hover:w-[9rem] overflow-hidden h-6 ">{{music[musicPosition].title}}</p>
                         <p class="text-neutral-500">{{music[musicPosition].artist}}</p>
                     </div>
                 </div>
-                <div class="hidden md:flex flex-col h-20 w-[30vw]  items-center justify-center gap-4 z-30 text-white  transition-all  opacity-0 md:group-hover:opacity-100 ">
-                   <div class="flex gap-4 h-1">
-
+                <div class="hidden md:flex flex-col h-20 w-[30vw]  items-center justify-center z-30 text-white  transition-all  opacity-0 md:group-hover:opacity-100 ">
+                   <div class="flex gap-4 items-center ">
+                    <img 
+                    @click="random()" 
+                    src="../assets/icon/random.svg" 
+                    class="h-6 w-6 rounded-full p-1 cursor-pointer"                 
+                    :class="{'bg-neutral-600': isRandom}"
+                    alt=""
+                    >
                     <img src="../assets/icon/previous.svg" alt="" class="h-5 w-5 cursor-pointer" @click="previous()">
                     <img v-if="isPlaying" src="../assets/icon/stop.svg" alt="" class="h-5 w-5 cursor-pointer" @click="play(false)">
                     <img v-else src="../assets/icon/play.svg" alt="" class="h-5 w-5 cursor-pointer" @click="play(true)">
                     <img src="../assets/icon/next.svg" alt="" class="h-5 w-5 cursor-pointer" @click="next()">
+                    <img 
+                    @click="loop()" 
+                    src="../assets/icon/loop.svg" 
+                    class="h-6 w-6 rounded-full p-1 cursor-pointer"                 
+                    :class="{'bg-neutral-600': isLoop}"
+                    alt=""
+                    >
                 </div>
                 <div class="relative h-5 w-full flex items-end select-none rounded-xl">
                     <input type="range" min="0" :max="duration"  v-model="currentTime" @input="changeTime(currentTime)" class=" w-full absolute h-1 rounded-xl bg-neutral-800 z-30"  id="myRange" >
@@ -261,9 +285,14 @@ function random() {
                 <div v-else @click="isLiked=!isLiked" class="h-10 w-fit active:bg-neutral-400 bg-neutral-700 flex items-center justify-center p-2 rounded-full">
                     <img src="../assets/icon/liked.svg" alt="" class="h-6">
                 </div>
-                <div class="h-10 w-fit bg-neutral-700 active:bg-neutral-400 flex items-center justify-center p-2 rounded-full">
-                    <img src="../assets/icon/loop.svg" alt="" class="h-6">
-                </div>
+                    <img 
+                    @click="loop()" 
+                    src="../assets/icon/loop.svg" 
+                    alt="" 
+                    class="h-10 w-fit  active:bg-neutral-400 flex items-center justify-center p-2 rounded-full"
+                    :class="{'bg-neutral-500': isLoop , 'bg-neutral-700': !isLoop}"
+
+                    >
                 
             </div>
         </div>
