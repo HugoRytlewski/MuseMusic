@@ -1,6 +1,5 @@
 <script setup>
     const router = useRoute()
-    console.log(router.name);
     
 </script>
 

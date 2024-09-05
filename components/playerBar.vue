@@ -2,7 +2,7 @@
     import { ref, onMounted, watch } from 'vue';
     
     const isPlaying = ref(false);
-    const volume = ref(50);
+    const volume = ref(0);
     const musicPosition = ref(0);
     const isOpen = ref(false);
     const currentTime = ref(0);
@@ -38,6 +38,10 @@
     let audio;
     
   onMounted(() => {
+    if (localStorage.getItem('volume')) {
+      volume.value = localStorage.getItem('volume');
+    }
+    
       audio = new Audio();
       audio.addEventListener('loadedmetadata', () => {
         duration.value = audio.duration;
@@ -71,6 +75,7 @@
     function setVolume(numb) {
       volume.value = Math.min(Math.max(numb, 0), 100);
       if (audio) audio.volume = volume.value / 100;
+      localStorage.setItem('volume', volume.value);
     }
     
     function changeTrack(newPosition) {
@@ -95,7 +100,7 @@
     }
     
     watch(volume, (newValue) => {
-      if (audio) audio.volume = newValue / 100;
+      setVolume(newValue);
     });
 
     function formatTime(seconds) {
@@ -117,26 +122,36 @@ function changeTime(time) {
       }
 });
 
+let originalMusicList = [...music];  // Conserve la playlist d'origine
+
 function random() {
+  let currentMusic = music[musicPosition.value];
   
   if (isRandom.value) {
+    // Désactivation du mode aléatoire
     isRandom.value = false;
-    let currentMusic = music[musicPosition.value];
-    music = music.filter((m, i) => i !== musicPosition.value);
-    music = [currentMusic, ...music];
-      } else {
 
+    // Retrouver la position actuelle dans la playlist d'origine
+    let originalPosition = originalMusicList.indexOf(currentMusic);
+    
+    // Remettre la liste d'origine avec la musique actuelle à la bonne position
+    music = [...originalMusicList];
+    musicPosition.value = originalPosition;
+    
+  } else {
+    // Activation du mode aléatoire
     isRandom.value = true;
-    let currentMusic = music[musicPosition.value];
+
+    // Exclure la musique actuelle et mélanger le reste
     music = music.filter((m, i) => i !== musicPosition.value);
     music = [currentMusic, ...music.sort(() => Math.random() - 0.5)];
+
+    // Réinitialiser la position à 0 pour jouer la musique actuelle
     musicPosition.value = 0;
-    
-
-
-    
   }
 }
+
+
 
 function loop(){
   if (isLoop.value) {
@@ -165,7 +180,7 @@ function loop(){
                 </transition>
 
                     <div class="flex h-20 w-full  md:items-center justify-start   gap-4 z-0 text-white">
-                      <div class="hidden md:flex bg-neutral-500 absolute h-14 w-14 group-hover:bg-opacity-50 bg-opacity-0 transition-all flex items-center justify-center"> 
+                      <div class="hidden md:flex bg-neutral-500 absolute h-14 w-14 group-hover:bg-opacity-50 bg-opacity-0 transition-all  items-center justify-center"> 
                         <img @click="isLiked=!isLiked" v-if="isLiked" src="../assets/icon/like.svg" alt="" class=" h-6 group-hover:opacity-100 opacity-0 cursor-pointer transition-all">
                         <img @click="isLiked=!isLiked" v-if="!isLiked" src="../assets/icon/liked.svg" alt="" class="h-6 group-hover:opacity-100 opacity-0 cursor-pointer transition-all">
 
