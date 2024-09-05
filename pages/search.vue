@@ -1,8 +1,12 @@
 <script setup>
   import { ref, computed, watch } from 'vue';
   import { Swiper, SwiperSlide } from 'swiper/vue';
+  import { Keyboard } from 'swiper/modules';
+
   import 'swiper/css';
-  
+  import 'swiper/css/keyboard';
+
+  const modules = [Keyboard];
   const slide = ref(0);
   let music = ref([
     {
@@ -28,15 +32,13 @@
     }
   ]);
   
-  // Variable pour la recherche
   const searchQuery = ref('');
   
-  // Filtrage des musiques selon la recherche
   const filteredMusic = computed(() => {
     const query = searchQuery.value.toLowerCase();
   
     if (!query) {
-      return music.value; // Retourne la liste entière si aucune recherche n'est effectuée
+      return music.value; 
     } else {
       return music.value.filter(m =>
         m.title.toLowerCase().includes(query) ||
@@ -45,25 +47,32 @@
     }
   });
   
-  // Réinitialiser Swiper si filteredMusic change
   watch(filteredMusic, (newValue) => {
     if (newValue.length === 0) {
-      slide.value = 0;  // Réinitialiser l'index si la recherche ne donne rien
+      slide.value = 0;
     }
   });
+
+
   </script>
   
   <template>
     <div class="h-screen w-screen p-10 items-center justify-center flex cursor-grab active:cursor-grabbing">
       <div>
-        <!-- Image de fond -->
+
+        <!-- Image de fond avec message -->
         <div class="absolute h-screen overflow-hidden w-screen flex items-center justify-center z-0">
+          
+          <!-- Message si aucune musique ne correspond à la recherche -->
           <div v-if="filteredMusic.length === 0" class="absolute top-0 left-0 flex text-center text-white mt-10 pb-[30rem] h-screen w-screen  items-center justify-center">
             <p>Aucune musique trouvée pour "{{ searchQuery }}".</p>
           </div>
-                    <img :src="filteredMusic.length ? filteredMusic[slide].cover : '/img/default-cover.jpg'" 
-               class="blur-xl z-20 scale-150 opacity-20 object-cover h-screen w-screen object-bottom">
-               
+          
+          <!-- Image de fond -->
+          <img 
+          :src="filteredMusic.length ? filteredMusic[slide].cover : '/img/default-cover.jpg'" 
+          class="blur-xl z-20 scale-150 opacity-20 object-cover h-screen w-screen object-bottom"
+          >  
         </div>
   
         <!-- Barre de recherche -->
@@ -81,32 +90,50 @@
         <!-- Swiper -->
         <div>
           <swiper 
-            class="h-screen w-screen flex items-center justify-center"
-            :space-between="-1100"
+            :modules="modules"
+            :keyboard="{enabled: true}"
+            class="h-screen w-screen flex items-center justify-center mySwiper"
+            :space-between="-1300"
             :slides-per-view="1"
             @slideChange="slide = $event.activeIndex"
           >
-            <!-- Affichage des musiques filtrées -->
+            <!-- Affichage des musiques  -->
             <swiper-slide 
               class="flex items-center justify-center"  
-              v-for="m in filteredMusic" 
+              v-for="(m,i) in filteredMusic" 
               :key="m.title"
             > 
               <div class="h-screen w-screen flex flex-col items-center justify-center">
-                <img :src="m.cover" alt="" class="absolute z-20 w-96 h-96">
-                <div class="translate-y-60 flex flex-col items-center">
-                  <p class="text-xl z-50 font-bold">{{ m.title }}</p>
-                  <p class="text-xl z-50 font-bold text-neutral-400">{{ m.artist }}</p>
-                </div>
+                <img 
+                :src="m.cover" 
+                alt="" 
+                class="absolute z-20 w-96 h-96 transition-all duration-500 "
+                :class="{ 'opacity-50': slide != i, 'opacity-100': slide == i }"
+                >
+                <transition name="fade">
+                  <div  v-if="slide == i" class="translate-y-60 flex flex-col items-center transition-all duration-300 ">
+                    <p class="text-xl z-50 font-bold">{{ m.title }}</p>
+                    <p  class="text-xl z-50 font-bold text-neutral-400">{{ m.artist }}</p>
+                  </div>
+                </transition>
               </div>
             </swiper-slide>
           </swiper>
           
-          <!-- Message si aucune musique ne correspond à la recherche -->
         
           
         </div>
       </div>
     </div>
   </template>
+
+  <style>
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity 0.5s;
+  }
+  .fade-enter, .fade-leave-to {
+    opacity: 0;
+  }
+
+  </style>
   
