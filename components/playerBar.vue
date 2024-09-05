@@ -37,15 +37,19 @@
     
     let audio;
     
-    onMounted(() => {
+  onMounted(() => {
       audio = new Audio();
       audio.addEventListener('loadedmetadata', () => {
-    duration.value = audio.duration;
-  });
+        duration.value = audio.duration;
+      });
 
-  audio.addEventListener('timeupdate', () => {
-    currentTime.value = audio.currentTime;
-  });
+      audio.addEventListener('timeupdate', () => {
+        currentTime.value = audio.currentTime;
+      });
+
+      audio.addEventListener('ended', () => {
+        next();
+      });
 });
 
     
@@ -138,6 +142,8 @@ function loop(){
   if (isLoop.value) {
     isLoop.value = false;
     audio.loop = false;
+
+    
   } else {
     isLoop.value = true;
     audio.loop = true;
@@ -151,7 +157,7 @@ function loop(){
 
 
 <template>
-    <div class="select-none fixed bottom-0 h-20 left-1/2 flex items-center justify-center group">
+    <div class="select-none fixed bottom-0 h-20 z-40 left-1/2 flex items-center justify-center group">
         <div  class="fixed  bottom-0  h-[3.5rem] md:h-20 md:w-[20rem] md:group-hover:w-[45rem] overflow-hidden w-[90vw]  duration-300 mb-3 md:mb-6  rounded-full md:pl-10 pr-10 bg-neutral-900 flex items-center justify-between ">
             <div @click="isOpen=!isOpen" class="z-50 md:hidden  absolute h-20 w-full " />
             <transition name="fade-blur">
@@ -159,8 +165,8 @@ function loop(){
                 </transition>
 
                     <div class="flex h-20 w-full  md:items-center justify-start   gap-4 z-0 text-white">
-                      <div class="bg-neutral-500 absolute h-14 w-14 group-hover:bg-opacity-50 bg-opacity-0 transition-all flex items-center justify-center"> 
-                        <img @click="isLiked=!isLiked" v-if="isLiked" src="../assets/icon/like.svg" alt="" class="h-6 group-hover:opacity-100 opacity-0 cursor-pointer transition-all">
+                      <div class="hidden md:flex bg-neutral-500 absolute h-14 w-14 group-hover:bg-opacity-50 bg-opacity-0 transition-all flex items-center justify-center"> 
+                        <img @click="isLiked=!isLiked" v-if="isLiked" src="../assets/icon/like.svg" alt="" class=" h-6 group-hover:opacity-100 opacity-0 cursor-pointer transition-all">
                         <img @click="isLiked=!isLiked" v-if="!isLiked" src="../assets/icon/liked.svg" alt="" class="h-6 group-hover:opacity-100 opacity-0 cursor-pointer transition-all">
 
                       </div>
@@ -179,7 +185,7 @@ function loop(){
                     :class="{'bg-neutral-600': isRandom}"
                     alt=""
                     >
-                    <img src="../assets/icon/previous.svg" alt="" class="h-5 w-5 cursor-pointer" @click="previous()">
+                    <img src="../assets/icon/next.svg" alt="" class="h-5 w-5 cursor-pointer rotate-180" @click="previous()">
                     <img v-if="isPlaying" src="../assets/icon/stop.svg" alt="" class="h-5 w-5 cursor-pointer" @click="play(false)">
                     <img v-else src="../assets/icon/play.svg" alt="" class="h-5 w-5 cursor-pointer" @click="play(true)">
                     <img src="../assets/icon/next.svg" alt="" class="h-5 w-5 cursor-pointer" @click="next()">
@@ -204,8 +210,8 @@ function loop(){
                 <div  class="  md:group-hover:hidden text-sm font-bold text-neutral-500"">
                     <p class="hidden md:flex">{{ formatTime(currentTime) }}</p>
                     <div class=" flex gap-4 justify-center items-center md:hidden  z-50">
-                        <img src="../assets/icon/previous.svg" alt="" class="h-5 w-5 cursor-pointer" @click="previous()">
-                        <img v-if="isPlaying" src="../assets/icon/stop.svg" alt="" class="h-5 w-5 cursor-pointer" @click="play(false)">
+                      <img src="../assets/icon/next.svg" alt="" class="h-5 w-5 cursor-pointer rotate-180" @click="previous()">
+                      <img v-if="isPlaying" src="../assets/icon/stop.svg" alt="" class="h-5 w-5 cursor-pointer" @click="play(false)">
                         <img v-else src="../assets/icon/play.svg" alt="" class="h-5 w-5 cursor-pointer" @click="play(true)">
                         <img src="../assets/icon/next.svg" alt="" class="h-5 w-5 cursor-pointer" @click="next()">
 
@@ -233,7 +239,7 @@ function loop(){
 
     </div>
     <transition >
-    <div v-if="isOpen" class="  flex-col h-screen rounded-3xl w-screen bg-neutral-900 fixed flex justify-end p-6 ">
+    <div v-if="isOpen" class=" z-50 flex-col h-screen rounded-t-3xl w-screen bg-neutral-900 fixed flex justify-end p-6 ">
         <div class="w-full flex items-start h-20 justify-end">
             <img @click="isOpen=!isOpen" src="../assets/icon/down.svg" class="text-white h-6 z-20"/>
 
