@@ -17,9 +17,15 @@
                 </div>
             </nuxt-link>
 
-            <div class="h-14 w-14 rounded-full hover:bg-neutral-800 duration-300 flex items-center justify-center cursor-pointer">
-                <img src="../assets/icon/search.svg" alt="" class="h-5   cursor-pointer">
-            </div>
+            <nuxt-link to="/search">
+                <div 
+                class="h-14 w-14 rounded-full hover:bg-neutral-800 duration-300 flex items-center justify-center cursor-pointer"
+                :class="router.name === 'search' ? 'bg-neutral-800' : 'bg-none'"
+                
+                >
+                    <img src="../assets/icon/search.svg" alt="" class="h-5   cursor-pointer">
+                </div>
+            </nuxt-link>
 
             <nuxt-link to="/favorite">
                 <div 
