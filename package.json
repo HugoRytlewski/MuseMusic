@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@nuxt/ui": "^2.18.4",
+    "@vueuse/nuxt": "^11.0.3",
     "nuxt": "^3.11.2",
     "swiper": "^11.1.12",
     "vue": "^3.4.21",
