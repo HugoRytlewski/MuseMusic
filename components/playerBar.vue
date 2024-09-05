@@ -172,7 +172,7 @@ function loop(){
 
 
 <template>
-    <div class="select-none fixed bottom-0 h-20 z-40 left-1/2 flex items-center justify-center group">
+    <div v-if="music" class="select-none fixed bottom-0 h-20 z-40 left-1/2 flex items-center justify-center group">
         <div  class="fixed  bottom-0  h-[3.5rem] md:h-20 md:w-[20rem] md:group-hover:w-[45rem] overflow-hidden w-[90vw]  duration-300 mb-3 md:mb-6  rounded-full md:pl-10 pr-10 bg-neutral-900 flex items-center justify-between ">
             <div @click="isOpen=!isOpen" class="z-50 md:hidden  absolute h-20 w-full " />
             <transition name="fade-blur">
