@@ -2,10 +2,12 @@
   import { ref, computed, watch } from 'vue';
   import { Swiper, SwiperSlide } from 'swiper/vue';
   import { Keyboard } from 'swiper/modules';
-
+  import { useWindowSize } from '@vueuse/core'
   import 'swiper/css';
   import 'swiper/css/keyboard';
 
+  const { width, height } = useWindowSize();
+  const spaceBetween = width.value > 500 ? -1300 : (width.value > 400 ? -160 : -150);
   const modules = [Keyboard];
   const slide = ref(0);
   let music = ref([
@@ -77,12 +79,12 @@
   
         <!-- Barre de recherche -->
         <div class="h-28 w-screen rounded-xl pl-20 pr-20 pt-10 z-40 top-10 absolute cursor-pointer flex items-center justify-center">
-          <div class="h-full w-[40rem] bg-neutral-400 bg-opacity-25 rounded-full items-center justify-start flex">
+          <div class="md:h-full h-14 w-[40rem] bg-neutral-400 bg-opacity-25 rounded-full items-center justify-start flex">
             <img src="../assets/icon/search.svg" alt="" class="h-6 absolute translate-x-7">
             <input 
               type="text" 
               v-model="searchQuery" 
-              class="focus:outline-none focus:outline-2 text-2xl pl-20 focus:outline-neutral-200 focus:outline-opacity-30 h-full w-full p-4 bg-transparent appearance-none rounded-full" 
+              class="focus:outline-none focus:outline-2 md:text-2xl pl-20 focus:outline-neutral-200 focus:outline-opacity-30 h-full w-full p-4 bg-transparent appearance-none rounded-full" 
               placeholder="Musique, Artiste, Albums">
           </div>
         </div>
@@ -93,7 +95,7 @@
             :modules="modules"
             :keyboard="{enabled: true}"
             class="h-screen w-screen flex items-center justify-center mySwiper"
-            :space-between="-1300"
+            :space-between="spaceBetween"
             :slides-per-view="1"
             @slideChange="slide = $event.activeIndex"
           >
@@ -107,11 +109,11 @@
                 <img 
                 :src="m.cover" 
                 alt="" 
-                class="absolute z-20 w-96 h-96 transition-all duration-500 "
+                class="absolute z-20 md:w-96 md:h-96 h-52 w-52 transition-all duration-500 "
                 :class="{ 'opacity-50': slide != i, 'opacity-100': slide == i }"
                 >
                 <transition name="fade">
-                  <div  v-if="slide == i" class="translate-y-60 flex flex-col items-center transition-all duration-300 ">
+                  <div  v-if="slide == i" class="md:translate-y-60 translate-y-44 flex flex-col items-center transition-all duration-300 ">
                     <p class="text-xl z-50 font-bold">{{ m.title }}</p>
                     <p  class="text-xl z-50 font-bold text-neutral-400">{{ m.artist }}</p>
                   </div>
