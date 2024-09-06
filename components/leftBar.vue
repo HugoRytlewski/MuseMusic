@@ -5,7 +5,7 @@
 
 <template>
 
-    <div class="select-none fixed z-50 hidden md:flex h-[52rem] w-20  border-neutral-300  flex-col items-center justify-center gap-20 pl-10">
+    <div class="select-none fixed z-50 flex h-[52rem] w-20  border-neutral-300  md:flex-col items-center justify-center gap-20 pl-10">
         <div class="flex flex-col gap-3 bg-neutral-900 bg-opacity-80  backdrop-blur-2xl items-center justify-center rounded-full p-2 ">
             <nuxt-link to="/">
                 <div 

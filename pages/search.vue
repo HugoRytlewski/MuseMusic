@@ -101,23 +101,29 @@
           >
             <!-- Affichage des musiques  -->
             <swiper-slide 
-              class="flex items-center justify-center"  
+              class="flex items-center justify-center "  
               v-for="(m,i) in filteredMusic" 
               :key="m.title"
             > 
-              <div class="h-screen w-screen flex flex-col items-center justify-center">
-                <img 
-                :src="m.cover" 
-                alt="" 
-                class="absolute z-20 md:w-96 md:h-96 h-52 w-52 transition-all duration-500 "
-                :class="{ 'opacity-50': slide != i, 'opacity-100': slide == i }"
-                >
+              <div class=" h-screen w-screen flex flex-col items-center justify-center gap-10 z-20">
+                <div class="group h-96 w-96 flex flex-col items-center justify-center z-20 ">
+                  <img 
+                  :src="m.cover" 
+                  alt="" 
+                  class=" group-hover:opacity-40  z-20 md:w-96 md:h-96 h-52 w-52 transition-all duration-500 "
+                  :class="{ 'opacity-50': slide != i, 'opacity-100 scale-110': slide == i }"
+                  >
+                  <img v-if="slide == i" src="../assets/icon/play.svg" alt="" class=" cursor-pointer opacity-0 group-hover:opacity-100  duration-500 absolute h-20 z-30">
+                 
+                  
+                </div>
                 <transition name="fade">
-                  <div  v-if="slide == i" class="md:translate-y-60 translate-y-44 flex flex-col items-center transition-all duration-300 ">
+                  <div  v-if="slide == i" class="absolute md:translate-y-64 translate-y-44 flex flex-col items-center transition-all duration-300 ">
                     <p class="text-xl z-50 font-bold">{{ m.title }}</p>
                     <p  class="text-xl z-50 font-bold text-neutral-400">{{ m.artist }}</p>
                   </div>
                 </transition>
+              
               </div>
             </swiper-slide>
           </swiper>
