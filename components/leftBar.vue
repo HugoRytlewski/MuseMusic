@@ -5,8 +5,8 @@
 
 <template>
 
-    <div class="select-none fixed z-50 flex h-[52rem] w-20  border-neutral-300  md:flex-col items-center justify-center gap-20 pl-10">
-        <div class="flex flex-col gap-3 bg-neutral-900 bg-opacity-80  backdrop-blur-2xl items-center justify-center rounded-full p-2 ">
+    <div class="select-none fixed z-50 flex md:h-[52rem] md:w-20 w-screen bottom-0   border-neutral-300  md:flex-col items-center justify-center gap-20 md:pl-10">
+        <div class="flex md:flex-col gap-3 w-full md:w-fit bg-neutral-900 bg-opacity-80  backdrop-blur-2xl items-center justify-center md:rounded-full rounded-t-3xl p-2 ">
             <nuxt-link to="/">
                 <div 
                 class="h-14 w-14 rounded-full hover:bg-neutral-800 duration-300 flex items-center justify-center cursor-pointer p-2" 

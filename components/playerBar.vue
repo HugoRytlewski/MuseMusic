@@ -172,8 +172,8 @@ function loop(){
 
 
 <template>
-    <div v-if="music" class="select-none fixed bottom-0 h-20 z-40 left-1/2 flex items-center justify-center group">
-        <div  class="fixed  bottom-0  h-[3.5rem] md:h-20 md:w-[20rem] md:group-hover:w-[45rem] overflow-hidden w-[90vw]  duration-300 mb-3 md:mb-6  rounded-full md:pl-10 pr-10 bg-neutral-900 flex items-center justify-between ">
+    <div v-if="music" class="select-none fixed md:bottom-0  h-20 z-40 left-1/2 flex items-center justify-center group">
+        <div  class="fixed  md:bottom-0 bottom-20 h-[3.5rem] md:h-20 md:w-[20rem] md:group-hover:w-[45rem] overflow-hidden w-[90vw]  duration-300 mb-3 md:mb-6  rounded-full md:pl-10 pr-10 bg-neutral-900 flex items-center justify-between ">
             <div @click="isOpen=!isOpen" class="z-50 md:hidden  absolute h-20 w-full " />
             <transition name="fade-blur">
                     <img :src="music[musicPosition].cover" alt="" class="absolute opacity-30 pr-20 blur-xl scale-150  z-0 h-7 w-[222rem]">
@@ -306,14 +306,19 @@ function loop(){
                 <div v-else @click="isLiked=!isLiked" class="h-10 w-fit active:bg-neutral-400 bg-neutral-700 flex items-center justify-center p-2 rounded-full">
                     <img src="../assets/icon/liked.svg" alt="" class="h-6">
                 </div>
-                    <img 
-                    @click="loop()" 
-                    src="../assets/icon/loop.svg" 
-                    alt="" 
-                    class="h-10 w-fit  active:bg-neutral-400 flex items-center justify-center p-2 rounded-full"
-                    :class="{'bg-neutral-500': isLoop , 'bg-neutral-700': !isLoop}"
+                <div
+                class="h-10 w-fit active:bg-neutral-400 bg-neutral-700 flex items-center justify-center p-2 rounded-full"
+                >
+                  <img 
+                  @click="loop()" 
+                  src="../assets/icon/loop.svg" 
+                  alt="" 
+                  class="h-6 "
+                  :class="{'bg-neutral-500': isLoop , 'bg-neutral-700': !isLoop}"
 
-                    >
+                  >
+                </div>
+                 
                 
             </div>
         </div>
